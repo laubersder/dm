@@ -1092,9 +1092,13 @@ func (s *Syncer) Run(ctx context.Context) (err error) {
 			if err2 != nil {
 				return err2
 			}
+			lastLocation = nextLocation.Clone()
+		} else {
+			lastLocation = savedGlobalLastLocation.Clone() // restore global last pos
 		}
+
 		shardingReSync = nil
-		lastLocation = savedGlobalLastLocation.Clone() // restore global last pos
+		s.tctx.L().Info("closeShardingResync", zap.Stringer("lastLocation", lastLocation))
 		return nil
 	}
 
